@@ -6,8 +6,11 @@
 }
 
 .Item {
-  width: 25vw;
+  width: 100vw;
+  max-width: 998px;
   margin-top: 4vh;
+  padding-left: 4vw;
+  padding-right: 4vw;
 }
 
 .Item:last-child {
