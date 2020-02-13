@@ -1,9 +1,6 @@
 import React from 'react';
 import { Form, Select, Input, Button, Slider, Switch } from 'antd';
 
-const { TextArea } = Input;
-const { Option } = Select;
-
 class Panel extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
@@ -19,11 +16,10 @@ class Panel extends React.Component {
       labelCol: {span: 4},
       wrapperCol: {span: 20}
     }
-
     return (
       <Form labelAlign="left" onSubmit={this.handleSubmit} className="login-form">
         <Form.Item {...FromItemLayout} label="文字" required={false}>
-          <TextArea rows={2} minLength={10} maxLength={40} allowClear
+          <Input.TextArea rows={2} minLength={10} maxLength={40} allowClear
                     defaultValue="此证件仅供办理XX业务使用, 其它用途无效"/>
         </Form.Item>
         <Form.Item {...FromItemLayout} label="颜色" required={false}>
@@ -31,8 +27,12 @@ class Panel extends React.Component {
             placeholder="请选择颜色"
             onChange={this.handleSelectChange}
           >
-            <Option value="male">male</Option>
-            <Option value="female">female</Option>
+            <Select.Option value="white">白色</Select.Option>
+            <Select.Option value="grey">灰色</Select.Option>
+            <Select.Option value="black">黑色</Select.Option>
+            <Select.Option value="red">红色</Select.Option>
+            <Select.Option value="orange">橙色</Select.Option>
+            <Select.Option value="blue">蓝色</Select.Option>
           </Select>
         </Form.Item>
         <Form.Item {...FromItemLayout} label="透明度" required={false}>
@@ -42,8 +42,11 @@ class Panel extends React.Component {
           <Switch checkedChildren="开" unCheckedChildren="关" defaultChecked />
         </Form.Item>
         <Form.Item>
+          <Button size="default" htmlType="submit" block>
+            预览
+          </Button>
           <Button type="primary" htmlType="submit" block>
-            Log in
+            保存
           </Button>
         </Form.Item>
       </Form>

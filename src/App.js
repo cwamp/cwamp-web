@@ -3,12 +3,9 @@ import { Upload, Icon, message, Form } from 'antd';
 import Panel from './Panel';
 import './App.css';
 
-const { Dragger } = Upload;
-
 function App() {
   const props = {
-    name: 'file',
-    multiple: true,
+    name: 'image/*',
     action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
     onChange(info) {
       const { status } = info.file;
@@ -28,15 +25,15 @@ function App() {
   return (
     <div className="App">
       <div className="Item">
-        <Dragger {...props}>
+        <Upload.Dragger {...props}>
           <p className="ant-upload-drag-icon">
             <Icon type="inbox"/>
           </p>
-          <p className="ant-upload-text">Click or drag file to this area to upload</p>
+          <p className="ant-upload-text">点击或拖拽上传图片</p>
           <p className="ant-upload-hint">
             声明: 本程序不会上传任何信息到服务器, 所有操作均在本地完成
           </p>
-        </Dragger>
+        </Upload.Dragger>
       </div>
       <div className="Item">
         <WrappedPanel />
