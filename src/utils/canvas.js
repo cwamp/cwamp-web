@@ -3,9 +3,9 @@ export default function (state) {
   const image = state.get('image');
   console.log(ctx, image);
   if (!ctx || !image) return;
-  const fillText = state.get('fillText');
-  const color = state.get('color');
-  const opacity = state.get('opacity');
+  // const fillText = state.get('fillText');
+  // const color = state.get('color');
+  // const opacity = state.get('opacity');
   const showAppName = state.get('showAppName');
 
   const { width, height } = image;
