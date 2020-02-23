@@ -62,7 +62,7 @@ class App extends React.Component {
       name: 'image/*',
       listType: 'picture-card',
       showUploadList: false,
-      action: 'http://www.mocky.io/v2/5e5223642d00008200357a86',
+      action: 'https://www.mocky.io/v2/5e5223642d00008200357a86',
       onChange: (info) => this.handleChange(info),
     };
 
