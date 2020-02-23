@@ -1,0 +1,15 @@
+export const CTX_CREATED = 'CTX_CREATED';
+
+export const IMAGE_CHANGED = 'IMAGE_CHANGED';
+
+export const IMAGE_LOADED = 'IMAGE_LOADED';
+
+export const TEXTAREA_CHANGED = 'TEXTAREA_CHANGED';
+
+export const COLOR_CHANGED = 'COLOR_CHANGED';
+
+export const OPACITY_CHANGED = 'OPACITY_CHANGED';
+
+export const SHOW_APP_NAME_CHANGED = 'SHOW_APP_NAME_CHANGED';
+
+export const RENDER = 'RENDER';
