@@ -6,13 +6,22 @@ import actionCreators from '../store/action-creators';
 
 class Panel extends React.Component {
 
+  selectChanged = (value, option) => {
+    const { colors, switchColor } = this.props;
+    const colorIndex = colors.findIndex(color => color.get('color') === value);
+    switchColor(colorIndex);
+  };
+
   render() {
     const FromItemLayout = {
       labelCol: {span: 4},
       wrapperCol: {span: 20}
     };
 
-    const { image, fillText, opacity, showAppName, switchText, switchOpacity, switchShowAppName } = this.props
+    const { image, fillText, colors, colorIndex, opacity, showAppName, switchText, switchOpacity, switchShowAppName } = this.props
+    const selectOptions = colors.map((color) =>
+      <Select.Option value={color.get('color')} key={color.get('color')}>{color.get('text')}</Select.Option>
+    );
 
     return (
       <Form labelAlign="left" className="login-form">
@@ -25,14 +34,11 @@ class Panel extends React.Component {
         <Form.Item {...FromItemLayout} label="颜色" required={false}>
           <Select
             placeholder="请选择颜色"
-            onChange={this.handleSelectChange}
+            firstActiveValue="blue"
+            value={colors.get(colorIndex).get('text')}
+            onChange={this.selectChanged}
           >
-            <Select.Option value="white">白色</Select.Option>
-            <Select.Option value="grey">灰色</Select.Option>
-            <Select.Option value="black">黑色</Select.Option>
-            <Select.Option value="red">红色</Select.Option>
-            <Select.Option value="orange">橙色</Select.Option>
-            <Select.Option value="blue">蓝色</Select.Option>
+            { selectOptions }
           </Select>
         </Form.Item>
         <Form.Item {...FromItemLayout} label="透明度" required={false}>
@@ -58,6 +64,8 @@ class Panel extends React.Component {
 const mapState = (state) => ({
   image: state.get('image'),
   fillText: state.get('fillText'),
+  colors: state.get('colors'),
+  colorIndex: state.get('colorIndex'),
   opacity: state.get('opacity'),
   showAppName: state.get('showAppName')
 });
@@ -65,6 +73,9 @@ const mapState = (state) => ({
 const mapDispatch = (dispatch) => ({
   switchText(text) {
     dispatch(actionCreators[actionTypes.TEXTAREA_CHANGED](text));
+  },
+  switchColor(colorIndex) {
+    dispatch(actionCreators[actionTypes.COLOR_CHANGED](colorIndex));
   },
   switchOpacity(opacity) {
     dispatch(actionCreators[actionTypes.OPACITY_CHANGED](opacity));

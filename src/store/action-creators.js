@@ -31,10 +31,10 @@ const actionCreators = {
       text
     }
   },
-  [actionTypes.COLOR_CHANGED](color) {
+  [actionTypes.COLOR_CHANGED](colorIndex) {
     return {
       type: actionTypes.COLOR_CHANGED,
-      color
+      colorIndex
     }
   },
   [actionTypes.OPACITY_CHANGED](opacity) {
