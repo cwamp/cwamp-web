@@ -52,7 +52,8 @@ class Panel extends React.Component {
       wrapperCol: {span: 20}
     };
 
-    const { canvas, image, filename, fileext, filetype, fillText, colors, colorIndex, opacity, showAppName, switchText, switchOpacity, switchShowAppName } = this.props
+    const { image, filename, fileext, fillText, colors, colorIndex, opacity,
+      showAppName, switchText, switchOpacity, switchShowAppName } = this.props;
     const selectOptions = colors.map((color) =>
       <Select.Option value={color.get('color')} key={color.get('color')}>{color.get('text')}</Select.Option>
     );

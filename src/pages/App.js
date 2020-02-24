@@ -18,8 +18,13 @@ class App extends React.Component {
 
   componentWillUnmount() {
     const { createCtx } = this.props;
-    createCtx(null)
+    createCtx(null, null)
   }
+
+  handleCanvasClick = () => {
+    const uploader = document.getElementById('uploader');
+    uploader && uploader.click();
+  };
 
   handleChange = info => {
     const { switchImage } = this.props;
@@ -29,9 +34,8 @@ class App extends React.Component {
     } else if (status === 'done') {
       const filename = name.substring(0, name.lastIndexOf('.'));
       const fileext = name.substring(name.lastIndexOf('.') + 1);
-      const filetype = type;
       getBase64(originFileObj).then(imageUrl => {
-        switchImage(imageUrl, filename, filetype, fileext)
+        switchImage(imageUrl, filename, type, fileext)
       }).catch(console.error);
       message.success(`${name} 上传成功.`);
     } else if (status === 'error') {
@@ -42,7 +46,6 @@ class App extends React.Component {
   render() {
     const props = {
       name: 'image/*',
-      listType: 'picture-card',
       showUploadList: false,
       action: 'https://www.mocky.io/v2/5e5223642d00008200357a86',
       onChange: (info) => this.handleChange(info),
@@ -51,11 +54,15 @@ class App extends React.Component {
     const WrappedPanel = Form.create({ name: 'normal_login' })(Panel);
     const { imageUrl, image } = this.props;
 
-    let content;
-    if (!imageUrl) {
-      content = (
-        <div className="Item">
-          <Upload.Dragger {...props}>
+    return (
+      <div className="App">
+        <canvas id="canvas"
+                width={(image && image.width) || 0}
+                height={(image && image.height) || 0}
+                onClick={this.handleCanvasClick}
+        ></canvas>
+        <div className="Item" style={{display: imageUrl ? 'none' : ''}}>
+          <Upload.Dragger {...props} id="uploader">
             <p className="ant-upload-drag-icon">
               <Icon type="inbox"/>
             </p>
@@ -65,21 +72,6 @@ class App extends React.Component {
             </p>
           </Upload.Dragger>
         </div>
-      );
-    } else {
-      content = (
-        <div className="Item">
-          <Upload {...props}>
-            <img alt="" src={imageUrl}/>
-          </Upload>
-        </div>
-      );
-    }
-
-    return (
-      <div className="App">
-        { content }
-        <canvas id="canvas" width={(image && image.width) || 320} height={(image && image.height) || 160}></canvas>
         <div className="Item">
           <WrappedPanel />
         </div>
