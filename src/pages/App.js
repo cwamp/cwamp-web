@@ -3,17 +3,9 @@ import { connect } from 'react-redux'
 import { Upload, Icon, message, Form } from 'antd';
 import * as actionTypes from '../store/action-types';
 import actionCreators from '../store/action-creators';
+import getBase64 from '../utils/base'
 import Panel from './Panel';
 import './App.css';
-
-function getBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-  });
-}
 
 class App extends React.Component {
 
@@ -21,7 +13,7 @@ class App extends React.Component {
     const { createCtx } = this.props;
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
-    createCtx(ctx)
+    createCtx(canvas, ctx)
   }
 
   componentWillUnmount() {
@@ -29,27 +21,17 @@ class App extends React.Component {
     createCtx(null)
   }
 
-  handleCancel = () => this.setState({ previewVisible: false });
-
-  handlePreview = async file => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-
-    this.setState({
-      previewImage: file.url || file.preview,
-      previewVisible: true,
-    });
-  };
-
   handleChange = info => {
     const { switchImage } = this.props;
-    const { file: { status, name, originFileObj } } = info;
+    const { file: { status, name, type, originFileObj } } = info;
     if (status === 'uploading') {
       message.info('上传中...');
     } else if (status === 'done') {
+      const filename = name.substring(0, name.lastIndexOf('.'));
+      const fileext = name.substring(name.lastIndexOf('.') + 1);
+      const filetype = type;
       getBase64(originFileObj).then(imageUrl => {
-        switchImage(imageUrl)
+        switchImage(imageUrl, filename, filetype, fileext)
       }).catch(console.error);
       message.success(`${name} 上传成功.`);
     } else if (status === 'error') {
@@ -114,11 +96,11 @@ const mapState = (state) => ({
 });
 
 const mapDispatch = (dispatch) => ({
-  createCtx(ctx) {
-    dispatch(actionCreators[actionTypes.CTX_CREATED](ctx));
+  createCtx(canvas, ctx) {
+    dispatch(actionCreators[actionTypes.CTX_CREATED](canvas, ctx));
   },
-  switchImage(imageUrl) {
-    dispatch(actionCreators[actionTypes.IMAGE_CHANGED](imageUrl));
+  switchImage(imageUrl, filename, filetype, fileext) {
+    dispatch(actionCreators[actionTypes.IMAGE_CHANGED](imageUrl, filename, filetype, fileext));
   },
 });
 

@@ -2,18 +2,22 @@ import * as actionTypes from './action-types';
 import loadImage from '../utils/image';
 
 const actionCreators = {
-  [actionTypes.CTX_CREATED](ctx) {
+  [actionTypes.CTX_CREATED](canvas, ctx) {
     return {
       type: actionTypes.CTX_CREATED,
+      canvas,
       ctx
     }
   },
-  [actionTypes.IMAGE_CHANGED](imageUrl) {
+  [actionTypes.IMAGE_CHANGED](imageUrl, filename, filetype, fileext) {
     return (dispatch) => {
       loadImage(imageUrl).then(image => {
         dispatch({
           type: actionTypes.IMAGE_CHANGED,
-          imageUrl
+          imageUrl,
+          filename,
+          filetype,
+          fileext
         });
         dispatch({
           type: actionTypes.IMAGE_LOADED,
@@ -26,21 +30,36 @@ const actionCreators = {
     }
   },
   [actionTypes.TEXTAREA_CHANGED](text) {
-    return {
-      type: actionTypes.TEXTAREA_CHANGED,
-      text
+    return (dispatch) => {
+      dispatch({
+        type: actionTypes.TEXTAREA_CHANGED,
+        text
+      });
+      dispatch({
+        type: actionTypes.RENDER,
+      })
     }
   },
   [actionTypes.COLOR_CHANGED](colorIndex) {
-    return {
-      type: actionTypes.COLOR_CHANGED,
-      colorIndex
+    return (dispatch) => {
+      dispatch({
+        type: actionTypes.COLOR_CHANGED,
+        colorIndex
+      });
+      dispatch({
+        type: actionTypes.RENDER,
+      })
     }
   },
   [actionTypes.OPACITY_CHANGED](opacity) {
-    return {
-      type: actionTypes.OPACITY_CHANGED,
-      opacity
+    return (dispatch) => {
+      dispatch({
+        type: actionTypes.OPACITY_CHANGED,
+        opacity
+      });
+      dispatch({
+        type: actionTypes.RENDER,
+      })
     }
   },
   [actionTypes.SHOW_APP_NAME_CHANGED](showAppName) {
@@ -49,9 +68,9 @@ const actionCreators = {
         type: actionTypes.SHOW_APP_NAME_CHANGED,
         showAppName
       });
-      // dispatch({
-      //   type: actionTypes.RENDER,
-      // })
+      dispatch({
+        type: actionTypes.RENDER,
+      })
     }
   }
 };

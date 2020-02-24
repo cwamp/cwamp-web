@@ -1,15 +1,49 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { Form, Select, Input, Button, Slider, Switch } from 'antd';
+import { Form, Select, Input, Button, Slider, Switch, Modal } from 'antd';
 import * as actionTypes from '../store/action-types';
 import actionCreators from '../store/action-creators';
 
 class Panel extends React.Component {
 
+  state = {
+    previewVisible: false,
+  };
+
   selectChanged = (value, option) => {
     const { colors, switchColor } = this.props;
     const colorIndex = colors.findIndex(color => color.get('color') === value);
     switchColor(colorIndex);
+  };
+
+  handleCancel = () => {
+    this.setState({
+      previewVisible: false,
+    });
+  };
+
+  handlePreview = () => {
+    this.setState({
+      previewVisible: true,
+    });
+  };
+
+  blobCallback = () => {
+    const { filename, fileext } = this.props;
+    return function(b) {
+      let a = document.createElement("a");
+      a.textContent = "Download";
+      document.body.appendChild(a);
+      a.style.display = "none";
+      a.download = `${filename}.${fileext}`;
+      a.href = window.URL.createObjectURL(b);
+      a.click();
+    }
+  };
+
+  download = () => {
+    const { canvas, filetype } = this.props;
+    canvas && canvas.toBlob(this.blobCallback(), filetype || 'image/png', 1);
   };
 
   render() {
@@ -18,10 +52,12 @@ class Panel extends React.Component {
       wrapperCol: {span: 20}
     };
 
-    const { image, fillText, colors, colorIndex, opacity, showAppName, switchText, switchOpacity, switchShowAppName } = this.props
+    const { canvas, image, filename, fileext, filetype, fillText, colors, colorIndex, opacity, showAppName, switchText, switchOpacity, switchShowAppName } = this.props
     const selectOptions = colors.map((color) =>
       <Select.Option value={color.get('color')} key={color.get('color')}>{color.get('text')}</Select.Option>
     );
+
+    const { previewVisible } = this.state;
 
     return (
       <Form labelAlign="left" className="login-form">
@@ -49,20 +85,27 @@ class Panel extends React.Component {
                   onChange={(checked, e) => switchShowAppName(checked)} />
         </Form.Item>
         <Form.Item>
-          <Button size="default" block disabled={!image}>
+          <Button size="default" block disabled={!image} onClick={this.handlePreview}>
             预览
           </Button>
-          <Button type="primary" block disabled={!image}>
+          <Button type="primary" block disabled={!image} onClick={this.download}>
             保存
           </Button>
         </Form.Item>
+        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+          <img alt={`${filename}.${fileext}`} style={{ width: '100%' }} src={image} />
+        </Modal>
       </Form>
     );
   }
 }
 
 const mapState = (state) => ({
+  canvas: state.get('canvas'),
   image: state.get('image'),
+  filename: state.get('filename'),
+  filetype: state.get('filetype'),
+  fileext: state.get('fileext'),
   fillText: state.get('fillText'),
   colors: state.get('colors'),
   colorIndex: state.get('colorIndex'),

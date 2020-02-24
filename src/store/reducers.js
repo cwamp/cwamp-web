@@ -12,8 +12,12 @@ import {
 } from './action-types';
 
 const defaultState = fromJS({
+  canvas: null,
   ctx: null,
   imageUrl: '',
+  filename: '',
+  filetype: '',
+  fileext: '',
   image: null,
   fillText: '',
   colors: [
@@ -32,9 +36,13 @@ const defaultState = fromJS({
 export default (state = defaultState, action) => {
   switch (action.type) {
     case CTX_CREATED:
-      return state.set('ctx', action.ctx);
+      return state.set('canvas', action.canvas)
+        .set('ctx', action.ctx);
     case IMAGE_CHANGED:
-      return state.set('imageUrl', action.imageUrl);
+      return state.set('imageUrl', action.imageUrl)
+        .set('filename', action.filename)
+        .set('filetype', action.filetype)
+        .set('fileext', action.fileext);
     case IMAGE_LOADED:
       return state.set('image', action.image);
     case TEXTAREA_CHANGED:
@@ -46,7 +54,6 @@ export default (state = defaultState, action) => {
     case SHOW_APP_NAME_CHANGED:
       return state.set('showAppName', action.showAppName);
     case RENDER:
-      console.log('rerender');
       render(state);
       return state;
     default:
