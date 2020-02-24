@@ -59,8 +59,7 @@ class App extends React.Component {
         <canvas id="canvas"
                 width={(image && image.width) || 0}
                 height={(image && image.height) || 0}
-                onClick={this.handleCanvasClick}
-        ></canvas>
+                onClick={this.handleCanvasClick} />
         <div className="Item" style={{display: imageUrl ? 'none' : ''}}>
           <Upload.Dragger {...props} id="uploader">
             <p className="ant-upload-drag-icon">
